@@ -1,0 +1,5 @@
+required
+python3 pyqt5
+pip install -U git+https://github.com/UmSenhorQualquer/pyforms.git 
+pysettings: sudo pip install git+https://github.com/UmSenhorQualquer/pysettings.git
+pip install git+https://bitbucket.org/fchampalimaud/logging-bootstrap.git --user
