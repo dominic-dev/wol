@@ -4,10 +4,10 @@ import pickle
 import xlrd
 import xlsxwriter
 
-BASE_PATH = os.path.join('..', 'data', 'stamlijst.xlsx')
+BASE_PATH = os.path.join('data', 'stamlijst.xlsx')
 OUTPUT_DIR = 'output'
 OUTPUT_FILE = 'oogstlijst.xlsx'
-OUTPUT_PATH = os.path.join('..', OUTPUT_DIR, OUTPUT_FILE)
+OUTPUT_PATH = os.path.join(OUTPUT_DIR, OUTPUT_FILE)
 
 
 class HarvestList:
@@ -23,7 +23,7 @@ class HarvestList:
                                range(sheet.nrows)][1:]
 
         # Prepare output directory
-        output_dir_path = os.path.join('..', OUTPUT_DIR)
+        output_dir_path = OUTPUT_DIR
         if not os.path.exists(output_dir_path):
             os.makedirs(output_dir_path)
 
