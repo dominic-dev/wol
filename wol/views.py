@@ -69,12 +69,18 @@ class OpenHarvest(BaseWidget):
         self._button_continue.value = self.open_file
 
     def open_file(self):
-        Main.hl_pickle = Main.hl.load_pickle(self._file.value)
-        Main.hl.harvest_list = Main.hl_pickle.harvest_list
-        Main.hl.name = Main.hl_pickle.name
+        try:
+            Main.hl_pickle = Main.hl.load_pickle(self._file.value)
+        except FileNotFoundError:
+            message = Message('Het opgegeven bestand kon niet worden geopend.')
+            message.parent = self
+            message.show()
+        else:
+            Main.hl.harvest_list = Main.hl_pickle.harvest_list
+            Main.hl.name = Main.hl_pickle.name
 
-        window = EditHarvest()
-        Main.root._panel.value = window
+            window = EditHarvest()
+            Main.root._panel.value = window
 
 class NewHarvest(BaseWidget):
     def __init__(self):
@@ -106,7 +112,7 @@ class EditHarvest(BaseWidget):
         self._list_left.readonly = True
 
         self._list_right = ControlList('Oogstlijst')
-        self._list_right.select_entire_row =True
+        self._list_right.select_entire_row = True
         self._list_right.horizontal_headers = [
             'Oogst',
             'Hoeveelheid (kg)',
@@ -122,12 +128,24 @@ class EditHarvest(BaseWidget):
             r = self._list_left.get_currentrow_value()
             self._list_right.__add__(r + [0])
 
-            cell = self._list_right.get_cell(0, self._list_right.rows_count - 1)
-            cell.setFlags(QtCore.Qt.ItemIsEditable)
-            #cell = self._list_right.get_cell(1, self._list_right.rows_count - 1)
-            #cell.setTextAlignment(QtCore.Qt.AlignCenter)
+            # cell = self._list_right.get_cell(0, self._list_right.rows_count - 1)
+            # cell.setFlags(QtCore.Qt.ItemIsEditable)
+            # cell = self._list_right.get_cell(1, self._list_right.rows_count - 1)
+            # cell.setTextAlignment(QtCore.Qt.AlignCenter)
+
+        def onclick_right(row, column):
+            # # print(dir(self._list_right))
+            if column == 0:
+                index = self._list_right.selected_row_index
+                print(index)
+                self._list_right.__sub__(index)
+            # # r = self._list_right.get_currentrow_value()
+            # self._list_right.__sub__(self._list_right.selected_row_index())
+            # #cell = self._list_right.get_cell(1, self._list_right.rows_count - 1)
+            # #cell.setTextAlignment(QtCore.Qt.AlignCenter)
 
         self._list_left.cell_double_clicked_event = onclick_left
+        self._list_right.cell_double_clicked_event = onclick_right
 
 
         for r in reference_list:
